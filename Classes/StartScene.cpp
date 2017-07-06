@@ -1,15 +1,16 @@
-#include "HelloWorldScene.h"
+#include "StartScene.h"
+#include "GameScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
-Scene* HelloWorld::createScene()
+Scene* StartScene::createScene()
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+    auto layer = StartScene::create();
 
     // add layer as a child to scene
     scene->addChild(layer);
@@ -19,7 +20,7 @@ Scene* HelloWorld::createScene()
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool StartScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -36,16 +37,25 @@ bool HelloWorld::init()
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
+
+	auto startGameItem = MenuItemImage::create(
+		".././Resources/startGameNormal.png",
+		".././Resources/startGameSelected.png",
+		CC_CALLBACK_1(StartScene::menuStartGameCallback, this));
+	startGameItem->setScaleX(0.3);
+	startGameItem->setScaleY(0.3);
+	startGameItem->setPosition(Vec2(origin.x + visibleSize.width - startGameItem->getContentSize().width / 2,
+		origin.y + startGameItem->getContentSize().height / 2));
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+                                           CC_CALLBACK_1(StartScene::menuCloseCallback, this));
     
     closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
+    auto menu = Menu::create(startGameItem,closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
@@ -77,7 +87,7 @@ bool HelloWorld::init()
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
+void StartScene::menuCloseCallback(Ref* pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
@@ -92,4 +102,9 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
     
     
+}
+
+void StartScene::menuStartGameCallback(cocos2d::Ref * pSender)
+{
+	Director::getInstance()->replaceScene(GameScene::createScene());
 }
