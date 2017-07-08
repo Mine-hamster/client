@@ -38,14 +38,14 @@ bool StartScene::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
 
-	auto startGameItem = MenuItemImage::create(
-		".././Resources/startGameNormal.png",
-		".././Resources/startGameSelected.png",
+	auto m_startGameItem = MenuItemImage::create(
+		m_startGameItemPicNormal,
+		m_startGameItemPicSelected,
 		CC_CALLBACK_1(StartScene::menuStartGameCallback, this));
-	startGameItem->setScaleX(0.3);
-	startGameItem->setScaleY(0.3);
-	startGameItem->setPosition(Vec2(origin.x + visibleSize.width - startGameItem->getContentSize().width / 2,
-		origin.y + startGameItem->getContentSize().height / 2));
+	m_startGameItem->setScaleX(0.3);
+	m_startGameItem->setScaleY(0.3);
+	m_startGameItem->setPosition(Vec2(origin.x + visibleSize.width - m_startGameItem->getContentSize().width / 2,
+		origin.y + m_startGameItem->getContentSize().height / 2));
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
@@ -55,7 +55,7 @@ bool StartScene::init()
                                 origin.y + closeItem->getContentSize().height/2));
 
     // create menu, it's an autorelease object
-    auto menu = Menu::create(startGameItem,closeItem, NULL);
+    auto menu = Menu::create(m_startGameItem, closeItem , NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 

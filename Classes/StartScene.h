@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+USING_NS_CC;
+
 class StartScene : public cocos2d::Layer
 {
 public:
@@ -13,15 +15,15 @@ public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
 	void menuStartGameCallback(cocos2d::Ref* pSender);
-    
+	
     // implement the "static create()" method manually
-    CREATE_FUNC(StartScene);
-
-//private:
-//	Sprite* m_backgroundPicture;
-//	MenuItem* m_startGameItem;
-//	char* m_startGameItemPicNormal = "startGameNormal.png";
-//	char* m_startGameItemPicSelected = "startGameSelected.png";
+	CREATE_FUNC(StartScene);
+	
+private:
+	Sprite* m_backGroundImage;
+	MenuItemImage* m_startGameItem;
+	char* m_startGameItemPicNormal = ".././Resources/startGameNormal.png";
+	char* m_startGameItemPicSelected = ".././Resources/startGameSelected.png";
 };
 
-#endif // __HELLOWORLD_SCENE_H__
+#endif // __START_SCENE_H__

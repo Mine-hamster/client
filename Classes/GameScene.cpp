@@ -2,6 +2,7 @@
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
+using namespace CocosDenshion;
 
 Scene* GameScene::createScene()
 {
@@ -41,6 +42,17 @@ bool GameScene::init()
     this->addChild(sprite, 0);
     
     return true;
+}
+
+void GameScene::preloadMusic()
+{
+	auto sae = SimpleAudioEngine::getInstance();
+	sae->preloadEffect(m_hitMineEffectFile);
+	sae->preloadEffect(m_mineExplodeEffectFile);
+
+	sae->preloadBackgroundMusic(m_backGroundMusicFile);
+	
+	sae->playBackgroundMusic(m_backGroundMusicFile, true);
 }
 
 
