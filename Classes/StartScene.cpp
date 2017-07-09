@@ -44,8 +44,9 @@ bool StartScene::init()
 		CC_CALLBACK_1(StartScene::menuStartGameCallback, this));
 	m_startGameItem->setScaleX(0.3);
 	m_startGameItem->setScaleY(0.3);
-	m_startGameItem->setPosition(Vec2(origin.x + visibleSize.width - m_startGameItem->getContentSize().width / 2,
-		origin.y + m_startGameItem->getContentSize().height / 2));
+	m_startGameItem->getContentSize().height;
+	m_startGameItem->setPosition(Vec2(origin.x + visibleSize.width/2 ,
+		origin.y + visibleSize.height/2 - 2 * m_startGameItem->getContentSize().height));
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
