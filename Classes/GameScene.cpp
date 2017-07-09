@@ -31,7 +31,7 @@ bool GameScene::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	
+	preloadMusic();
 	loadSprites();
 	loadAnimation();
 	initGrid();
@@ -42,22 +42,43 @@ bool GameScene::init()
 	m_backGroundImage->setScaleY(backGroundImageScaleY);
 	m_backGroundImage->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
-	// 
-	m_hamsterGrid[3][3]->runAction(Sequence::create(m_hamsterAppearAnimate,m_hamsterDisappearAnimate,NULL));
+
+	//
+	m_hamsterGrid[3][3]->runAction(Sequence::create(m_hamsterAppearAnimate,
+		m_hamsterDisappearAnimate,
+		CallFunc::create([=]() {m_hamsterGrid[3][3]->setVisible(false); }),
+		NULL));
    // add the sprite as a child to this layer
     this->addChild(m_backGroundImage, 0);
 
     return true;
 }
 
+void GameScene::scaleImage(float scaleFactor,Node* node, Vec2& scaledSize)
+{
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	float ScaleX = visibleSize.width * scaleFactor / node->getContentSize().width;
+	float ScaleY = visibleSize.height * scaleFactor / node->getContentSize().height;
+	//log("Content width is %f ,Scale is %f", m_startGameItem->getContentSize().width, ScaleX);
+	if (ScaleX > ScaleY) {
+		ScaleX = ScaleY;
+	}
+	else {
+		ScaleY = ScaleX;
+	}
+	node->setScaleX(ScaleX);
+	node->setScaleY(ScaleY);
+	scaledSize = Vec2(node->getContentSize().width*ScaleX, node->getContentSize().height*ScaleY);
+	
+}
+
 void GameScene::preloadMusic()
 {
 	auto sae = SimpleAudioEngine::getInstance();
-	sae->preloadEffect(m_hitMineEffectFile);
-	sae->preloadEffect(m_mineExplodeEffectFile);
-
+	//sae->preloadEffect(m_hitMineEffectFile);
+	//sae->preloadEffect(m_mineExplodeEffectFile);
 	sae->preloadBackgroundMusic(m_backGroundMusicFile);
-	
 	sae->playBackgroundMusic(m_backGroundMusicFile, true);
 }
 
@@ -94,12 +115,17 @@ void GameScene::initGrid()
 {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	float gridWidth = m_normalGridImage->getContentSize().width;
-	float gridHeight = m_normalGridImage->getContentSize().height;
+	float gridWidth;
+	float gridHeight;
+	Vec2 scaledSize;
+	float scaleFactor = 0.05;
 	int gridNum = gridSize*gridSize;
 	for (int i = 0; i < gridSize; i++) {
 		for (int j = 0; j < gridSize; j++) {
 			m_solvedGrid[i][j] = Sprite::create(".././Resources/solvedgrid.PNG");
+			scaleImage(scaleFactor, m_solvedGrid[i][j], scaledSize);
+			gridWidth = scaledSize.x;
+			gridHeight = scaledSize.y;
 			m_solvedGrid[i][j]->setPosition(
 				Vec2(visibleSize.width / 3 + origin.x + i * gridWidth + 2 * gridWidth,
 					visibleSize.height * 2 / 3 + origin.y - j * gridHeight - gridHeight));
@@ -108,6 +134,7 @@ void GameScene::initGrid()
 			// 是否生成地雷格子
 
 			//m_mineGrid[i][j] = Sprite::create(".././Resources/mine.PNG");
+			//scaleImage(scaleFactor, m_mineGrid[i][j], scaledSize);
 			//m_mineGrid[i][j]->setPosition(
 			//	Vec2(visibleSize.width / 3 + origin.x + i * gridWidth + 2 * gridWidth,
 			//		visibleSize.height * 2 / 3 + origin.y - j * gridHeight - gridHeight));
@@ -117,6 +144,7 @@ void GameScene::initGrid()
 			int number = i*gridSize + j;
 			std::string number_str = StringUtils::format("%d", number);
 			m_mineNumberGrid[i][j] = Label::createWithTTF(ttfConfig, number_str);
+			scaleImage(scaleFactor, m_mineNumberGrid[i][j], scaledSize);
 			m_mineNumberGrid[i][j]->setPosition(Vec2(visibleSize.width / 3 + origin.x + i * gridWidth + 2 * gridWidth,
 				visibleSize.height * 2 / 3 + origin.y - j * gridHeight - gridHeight));
 
@@ -126,12 +154,14 @@ void GameScene::initGrid()
 			this->addChild(m_mineNumberGrid[i][j], 3);
 
 			m_normalGrid[i][j] = Sprite::create(".././Resources/grid.PNG");
+			scaleImage(scaleFactor, m_normalGrid[i][j],scaledSize);
 			m_normalGrid[i][j]->setPosition(
 				Vec2(visibleSize.width / 3 + origin.x + i * gridWidth + 2 * gridWidth,
 					visibleSize.height * 2 / 3 + origin.y - j * gridHeight -  gridHeight));
 			this->addChild(m_normalGrid[i][j], 4);
 
-			m_hamsterGrid[i][j] = Sprite::create();
+			m_hamsterGrid[i][j] = Sprite::create(".././Resources/marmot_5.PNG");
+			scaleImage(scaleFactor, m_hamsterGrid[i][j], scaledSize);
 			m_hamsterGrid[i][j]->setPosition(
 				Vec2(visibleSize.width / 3 + origin.x + i * gridWidth + 2 * gridWidth,
 					visibleSize.height * 2 / 3 + origin.y - j * gridHeight - gridHeight));

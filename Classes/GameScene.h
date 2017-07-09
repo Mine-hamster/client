@@ -18,13 +18,14 @@ public:
     CREATE_FUNC(GameScene);
 
 private:
-
+	 void scaleImage(float scaleFactor, Node* node, Vec2& scaledSize);
 	// 以下由UI部分完成
 	void preloadMusic();					// 预加载音乐
 	void loadAnimation();	// 加载动画
 	void loadSprites();						// 加载精灵
 	void initGrid();
 	const static int gridSize = 9;
+	// 设置地雷数目显示
 	void setMineNumberGrid(int x,int y, int value);
 	Sprite* m_backGroundImage;
 	Sprite* m_hamsterImage;
@@ -51,7 +52,7 @@ private:
 
 	char* m_hitMineEffectFile = "";
 	char* m_mineExplodeEffectFile = "";
-	char* m_backGroundMusicFile = "";
+	char* m_backGroundMusicFile = ".././Resources/bgm.mp3";
 };
 
 #endif // __GAME_SCENE_H__

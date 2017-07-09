@@ -32,21 +32,27 @@ bool StartScene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-
+	
 	auto m_startGameItem = MenuItemImage::create(
 		m_startGameItemPicNormal,
 		m_startGameItemPicSelected,
 		CC_CALLBACK_1(StartScene::menuStartGameCallback, this));
-	m_startGameItem->setScaleX(0.3);
-	m_startGameItem->setScaleY(0.3);
+	float ScaleFactor = 0.1;
+	float ScaleX = visibleSize.width * ScaleFactor / m_startGameItem->getContentSize().width;
+	float ScaleY = visibleSize.height * ScaleFactor / m_startGameItem->getContentSize().height;
+	//log("Content width is %f ,Scale is %f", m_startGameItem->getContentSize().width, ScaleX);
+	if (ScaleX > ScaleY) {
+		ScaleX = ScaleY;
+	}
+	else {
+		ScaleY = ScaleX;
+	}
+	m_startGameItem->setScaleX(ScaleX);
+	m_startGameItem->setScaleY(ScaleY);
+	//log("Content width is %f ,Scale is %f", m_startGameItem->getContentSize().width, ScaleX);
 	m_startGameItem->getContentSize().height;
 	m_startGameItem->setPosition(Vec2(origin.x + visibleSize.width/2 ,
-		origin.y + visibleSize.height/2 - 2 * m_startGameItem->getContentSize().height));
+		origin.y + visibleSize.height/2 - 2 * visibleSize.height/10));
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
